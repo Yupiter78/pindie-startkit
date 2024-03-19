@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import styles from "./Header.module.css";
 import { Overlay } from "../Overlay/Overlay";
 import { Popup } from "../Popup/Popup";
-import { AuthForm } from "../AuthForm/AuthForm";
+// import { AuthForm } from "../AuthForm/AuthForm";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import RegisterForm from "@/app/components/RegisterForm/RegisterForm";
 
 const Header = () => {
     const [popupIsOpened, setPopupIsOpened] = useState(false);
@@ -109,7 +110,7 @@ const Header = () => {
             </nav>
             <Overlay isOpened={popupIsOpened} close={closePopup} />
             <Popup isOpened={popupIsOpened} close={closePopup}>
-                <AuthForm />
+                <RegisterForm />
             </Popup>
         </header>
     );
