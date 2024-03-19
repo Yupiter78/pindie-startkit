@@ -5,9 +5,11 @@ import { Overlay } from "../Overlay/Overlay";
 import { Popup } from "../Popup/Popup";
 import { AuthForm } from "../AuthForm/AuthForm";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
     const [popupIsOpened, setPopupIsOpened] = useState(false);
+    const pathname = usePathname();
     const openPopup = () => {
         setPopupIsOpened(true);
     };
@@ -27,32 +29,74 @@ const Header = () => {
             <nav className={styles.menu}>
                 <ul className={styles.menu__list}>
                     <li className={styles.menu__item}>
-                        <Link href="" className={styles.menu__link}>
+                        <Link
+                            href="/new"
+                            className={`${styles.menu__link} ${
+                                pathname === "/new"
+                                    ? styles.menu__link_active
+                                    : ""
+                            }`}
+                        >
                             Новинки
                         </Link>
                     </li>
                     <li className={styles.menu__item}>
-                        <Link href="" className={styles.menu__link}>
+                        <Link
+                            href="/popular"
+                            className={`${styles.menu__link} ${
+                                pathname === "/popular"
+                                    ? styles.menu__link_active
+                                    : ""
+                            }`}
+                        >
                             Популярные
                         </Link>
                     </li>
                     <li className={styles.menu__item}>
-                        <Link href="" className={styles.menu__link}>
+                        <Link
+                            href="/shooters"
+                            className={`${styles.menu__link} ${
+                                pathname === "/shooters"
+                                    ? styles.menu__link_active
+                                    : ""
+                            }`}
+                        >
                             Шутеры
                         </Link>
                     </li>
                     <li className={styles.menu__item}>
-                        <Link href="" className={styles.menu__link}>
+                        <Link
+                            href="/runners"
+                            className={`${styles.menu__link} ${
+                                pathname === "/runners"
+                                    ? styles.menu__link_active
+                                    : ""
+                            }`}
+                        >
                             Раннеры
                         </Link>
                     </li>
                     <li className={styles.menu__item}>
-                        <Link href="" className={styles.menu__link}>
+                        <Link
+                            href="/pixel-games"
+                            className={`${styles.menu__link} ${
+                                pathname === "/pixel-games"
+                                    ? styles.menu__link_active
+                                    : ""
+                            }`}
+                        >
                             Пиксельные
                         </Link>
                     </li>
                     <li className={styles.menu__item}>
-                        <Link href="" className={styles.menu__link}>
+                        <Link
+                            href="/tds"
+                            className={`${styles.menu__link} ${
+                                pathname === "/tds"
+                                    ? styles.menu__link_active
+                                    : ""
+                            }`}
+                        >
                             TDS
                         </Link>
                     </li>
