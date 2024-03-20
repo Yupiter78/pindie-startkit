@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Styles from "./RegisterForm.module.css";
-
+import Styles from "./Form.module.css";
 import api from "../../data/users";
 import { validator } from "../../utils/validator";
 import PropTypes from "prop-types";

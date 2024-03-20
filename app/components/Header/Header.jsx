@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import styles from "./Header.module.css";
 import { Overlay } from "../Overlay/Overlay";
 import { Popup } from "../Popup/Popup";
-// import { AuthForm } from "../AuthForm/AuthForm";
+// import { Form } from "../Form/Form";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import RegisterForm from "@/app/components/RegisterForm/RegisterForm";
+import RegisterForm from "@/app/components/Form/RegisterForm";
+import { AuthForm } from "@/app/components/Form/AuthForm";
 
 const Header = () => {
     const [popupIsOpened, setPopupIsOpened] = useState(false);
@@ -16,6 +17,12 @@ const Header = () => {
     };
     const closePopup = () => {
         setPopupIsOpened(false);
+    };
+
+    const [formType, setFormType] = useState("login");
+
+    const handleChangeFormType = (type) => {
+        setFormType(type);
     };
 
     return (
@@ -110,7 +117,37 @@ const Header = () => {
             </nav>
             <Overlay isOpened={popupIsOpened} close={closePopup} />
             <Popup isOpened={popupIsOpened} close={closePopup}>
-                <RegisterForm />
+                {formType === "register" ? (
+                    <>
+                        <h3 className="text-center">Register</h3>
+                        <RegisterForm />
+                        <p className="text-center mt-2">
+                            Already have account?
+                            <a
+                                role="button"
+                                className="text-primary ms-2 text-decoration-none"
+                                onClick={() => handleChangeFormType("login")}
+                            >
+                                Sing In
+                            </a>
+                        </p>
+                    </>
+                ) : (
+                    <>
+                        <h3 className="text-center">Login</h3>
+                        <AuthForm />
+                        <p className="text-center mt-2">
+                            Dont have account?
+                            <a
+                                role="button"
+                                className="text-primary ms-2 text-decoration-none"
+                                onClick={() => handleChangeFormType("register")}
+                            >
+                                Sing Up
+                            </a>
+                        </p>
+                    </>
+                )}
             </Popup>
         </header>
     );
