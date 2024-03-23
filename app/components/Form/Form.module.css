@@ -18,11 +18,12 @@
 .form__field {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
 .form__field-title {
-  margin-bottom: 8px;
+  margin-bottom: 5px;
+  margin-top: 10px;
   font-size: 22px;
 }
 
@@ -49,6 +50,7 @@
   letter-spacing: 1.2px;
   text-transform: uppercase;
   border: none;
+  margin: 10px 0;
   padding: 16px 24px;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
@@ -77,6 +79,7 @@
   text-transform: uppercase;
   border: none;
   padding: 16px 24px;
+  margin: 10px 0;
   transition: color 0.3s ease-in, background-color 0.3s ease-in;
 }
 
@@ -91,5 +94,12 @@
 
 .form__field-error {
   color: red;
+  margin-top: 2px;
   font-size: smaller;
+}
+
+
+.box-error__message {
+  color: red;
+  text-align: center;
 }

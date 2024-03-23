@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Styles from "./Form.module.css";
-import api from "../../data/users";
+import api from "../../data/data-utils";
 import { validator } from "../../utils/validator";
 import PropTypes from "prop-types";
 import { useRouter } from "next/navigation";
+import _ from "lodash";
 
-const RegisterForm = () => {
+const RegisterForm = ({ onCurrentUser, onClosePopup }) => {
     const history = useRouter();
     const [users, setUsers] = useState([]);
     useEffect(() => {
@@ -18,7 +19,6 @@ const RegisterForm = () => {
         password: "",
         confirmPassword: ""
     });
-    console.log("data: ", data);
     const [errors, setErrors] = useState({});
     const handleUpdateUsers = (newUsers) => {
         setUsers(newUsers);
@@ -87,16 +87,33 @@ const RegisterForm = () => {
         validate();
     }, [data]);
 
+    const createUrlAvatar = () => {
+        return `https://api.dicebear.com/7.x/avataaars/svg?seed=${(
+            Math.random() + 1
+        )
+            .toString(36)
+            .substring(7)}`;
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const isValid = validate();
         if (isValid) return;
-        const modifiedUser = (({ confirmPassword, ...rest }) => rest)(data);
+        const modifiedUser = (({ confirmPassword, role = "user", ...rest }) => {
+            const authUser = {
+                ...rest,
+                avatar: createUrlAvatar(),
+                role
+            };
+            onCurrentUser(authUser);
+            api.addCurrentUser(authUser);
+            return authUser;
+        })(data);
         try {
             const newUsers = api.createNewUser(modifiedUser);
             handleUpdateUsers(newUsers);
-            localStorage.setItem("users", JSON.stringify(newUsers));
             history.replace("/");
+            onClosePopup && onClosePopup();
         } catch (error) {
             console.error("Error creating new user: ", error);
         }
@@ -104,7 +121,7 @@ const RegisterForm = () => {
     return (
         <>
             <form className={Styles.form} onSubmit={handleSubmit}>
-                <h2 className={Styles.form__title}>Авторизация</h2>
+                <h2 className={Styles.form__title}>Регистрация</h2>
                 <div className={Styles.form__fields}>
                     <label className={Styles.form__field}>
                         <span className={Styles["form__field-title"]}>
@@ -183,7 +200,11 @@ const RegisterForm = () => {
                     <button className={Styles.form__reset} type="reset">
                         Очистить
                     </button>
-                    <button className={Styles.form__submit} type="submit">
+                    <button
+                        className={Styles.form__submit}
+                        disabled={!_.isEmpty(errors)}
+                        type="submit"
+                    >
                         Зарегистрироваться
                     </button>
                 </div>
@@ -193,8 +214,8 @@ const RegisterForm = () => {
 };
 
 RegisterForm.propTypes = {
-    users: PropTypes.array,
-    onUpdateUsers: PropTypes.func
+    onCurrentUser: PropTypes.func,
+    onClosePopup: PropTypes.func
 };
 
 export default RegisterForm;

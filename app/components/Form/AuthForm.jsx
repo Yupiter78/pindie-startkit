@@ -1,19 +1,22 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import Styles from "./Form.module.css";
-import api from "../../data/users";
+import api from "../../data/data-utils";
 import { validator } from "../../utils/validator";
 import { useRouter } from "next/navigation";
 import _ from "lodash";
+import PropTypes from "prop-types";
 
-export const AuthForm = () => {
+export const AuthForm = ({ onCurrentUser, onClosePopup }) => {
     const history = useRouter();
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        setUsers(api.getAllUsers());
+        const allUsers = api.getAllUsers();
+        if (!_.isEmpty(allUsers)) {
+            setUsers(allUsers);
+        }
     }, []);
 
-    const [currentUsers, setCurrentUser] = useState({});
-    console.log("currentUsers: ", currentUsers);
     const [message, setMessage] = useState("");
     const [data, setData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({});
@@ -55,10 +58,12 @@ export const AuthForm = () => {
             ({ email, password }) =>
                 email === data.email && password === data.password
         );
+
         if (user) {
-            setCurrentUser(user);
-            localStorage.setItem("currentUser", JSON.stringify(user));
-            history.replace("/books");
+            onCurrentUser(user);
+            api.addCurrentUser(user);
+            history.replace("/");
+            onClosePopup && onClosePopup();
         } else {
             setData({ email: "", password: "" });
             setMessage("Invalid email or password. Please try again.");
@@ -66,7 +71,9 @@ export const AuthForm = () => {
     };
     return (
         <>
-            {message && <p>{message}</p>}
+            {message && (
+                <p className={Styles["box-error__message"]}>{message}</p>
+            )}
             <form className={Styles.form} onSubmit={handleSubmit}>
                 <h2 className={Styles.form__title}>Авторизация</h2>
                 <div className={Styles.form__fields}>
@@ -112,7 +119,8 @@ export const AuthForm = () => {
                         Очистить
                     </button>
                     <button
-                        className={`${!_.isEmpty(errors) ? "disabled" : ""}`}
+                        className={Styles.form__submit}
+                        disabled={!_.isEmpty(errors)}
                     >
                         Войти
                     </button>
@@ -120,4 +128,9 @@ export const AuthForm = () => {
             </form>
         </>
     );
+};
+
+AuthForm.propTypes = {
+    onCurrentUser: PropTypes.func,
+    onClosePopup: PropTypes.func
 };

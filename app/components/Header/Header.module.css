@@ -86,6 +86,8 @@
     color: #ffff00;
 }
 
+
+
 @media (width <= 1440px) {
     .logo {
         width: 140px;

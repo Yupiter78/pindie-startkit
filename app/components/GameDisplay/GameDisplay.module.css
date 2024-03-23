@@ -61,6 +61,11 @@
     letter-spacing: 6%;
 }
 
+
+.message {
+    text-align: center;
+}
+
 @media (width <= 1200px) {
     .game {
         padding: 72px 32px;
